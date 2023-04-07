@@ -1,0 +1,24 @@
+[package]
+name = "stats-sql-generator"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.69"
+calamine = "0.19.1"
+chrono = "0.4.23"
+clap = { version = "4.1.4", features = ["derive"] }
+csv = "1.2.0"
+dialoguer = "0.10.3"
+dirs = "5.0.0"
+lazy_static = "1.4.0"
+rayon = "1.6.1"
+serde = { version = "1.0.152", features = ["derive"] }
+trycmd = "0.14.11"
+
+
+[[bin]]
+name = "profile_stats"
+path = "src/bin/profile_stats.rs"
