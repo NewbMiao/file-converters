@@ -28,12 +28,15 @@ pub fn get_top_ten_words(words: WordCounter) -> WordCounter {
     top_ten_words
 }
 
-pub fn merge_words_per_id(id: u32, acc: &mut HashMap<u32, WordCounter>, words: WordCounter) {
-    let words_entry: &mut WordCounter = acc.entry(id).or_default();
-
+pub fn merge_words(acc: &mut WordCounter, words: WordCounter) {
     words
         .into_iter()
-        .for_each(|(word, count)| *words_entry.entry(word).or_default() += count);
+        .for_each(|(word, count)| *acc.entry(word).or_default() += count);
+}
+
+pub fn merge_words_per_id(id: u32, acc: &mut HashMap<u32, WordCounter>, words: WordCounter) {
+    let words_entry: &mut WordCounter = acc.entry(id).or_default();
+    merge_words(words_entry, words);
 }
 #[test]
 fn test_analyze_words_should_work() {

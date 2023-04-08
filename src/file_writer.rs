@@ -35,11 +35,11 @@ async fn test_file_write_should_work() -> Result<()> {
 
     let path = "test.txt";
     let line = "hello from test";
-    fs::remove_file(path)?;
     let mut writer = AsyncFileWriter::new(path).await?;
     writer.write_line(line).await?;
     writer.flush().await?;
     assert_eq!(fs::read_to_string(path)?, format!("{}\n", line));
+    fs::remove_file(path)?;
 
     Ok(())
 }

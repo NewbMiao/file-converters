@@ -54,7 +54,7 @@ where
 }
 
 pub fn load_csv_line_stream<T: DeserializeOwned>(
-    file_path: &str,
+    file_path: &Path,
 ) -> impl Iterator<Item = Result<T, csv::Error>> {
     let file = File::open(file_path).unwrap();
     let reader = BufReader::new(file);

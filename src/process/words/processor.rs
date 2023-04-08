@@ -17,7 +17,8 @@ pub struct ContentRow {
 
 impl WordArgs {
     pub async fn write_to_file(&self, results: HashMap<u32, WordCounter>) -> Result<()> {
-        let mut file = AsyncFileWriter::new("words_output.csv").await?;
+        let path = "words_output.csv";
+        let mut file = AsyncFileWriter::new(path).await?;
         for (id, words) in results {
             file.write_line(&format!(
                 "{},{}",
@@ -28,7 +29,7 @@ impl WordArgs {
         }
 
         file.flush().await?;
-        println!("Generated word counts to file word_output.csv");
+        println!("Generated word counts to file {}", path);
         Ok(())
     }
 }
@@ -38,7 +39,7 @@ impl AsyncProcessor for WordArgs {
 
     async fn run(&self) -> Result<()> {
         match self.w_type {
-            WType::Mpsc => todo!(),
+            WType::Mpsc => self.get_top_ten_words_via_mpsc().await?,
             WType::Rayon => self.get_top_ten_words_via_rayon().await?,
         };
         Ok(())
