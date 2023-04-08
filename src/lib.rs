@@ -1,7 +1,9 @@
 use anyhow::Result;
+use async_trait::async_trait;
 use clap::{command, Parser, Subcommand};
 mod date;
 pub mod file;
+pub mod file_writer;
 pub mod process;
 
 #[derive(Parser, Debug)]
@@ -9,6 +11,14 @@ pub mod process;
 pub struct Cli<T: Subcommand> {
     #[clap(subcommand)]
     pub action: T,
+}
+
+pub trait CliArgs
+where
+    Self: Sized,
+{
+    fn parse_args(&mut self) -> Result<Self>;
+    fn parse_args_interactively(&mut self) -> Result<Self>;
 }
 
 pub trait Processor
@@ -34,10 +44,8 @@ where
     }
 }
 
-pub trait CliArgs
-where
-    Self: Sized,
-{
-    fn parse_args(&mut self) -> Result<Self>;
-    fn parse_args_interactively(&mut self) -> Result<Self>;
+#[async_trait]
+pub trait AsyncProcessor {
+    type Item;
+    async fn run(&self) -> Result<()>;
 }
