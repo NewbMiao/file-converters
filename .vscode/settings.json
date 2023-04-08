@@ -1,6 +1,9 @@
 {
   "editor.tabCompletion": "on",
   "diffEditor.codeLens": true,
+  "[markdown]": {
+    "editor.formatOnSave": false
+  },
   "rust-analyzer.linkedProjects": ["./Cargo.toml"],
   "rust-analyzer.showUnlinkedFileNotification": false
 }

@@ -1,7 +1,10 @@
 use std::path::PathBuf;
 
 use anyhow::{Ok, Result};
-use tokio::{fs::OpenOptions, io::AsyncWriteExt};
+use tokio::{
+    fs::{self, OpenOptions},
+    io::AsyncWriteExt,
+};
 
 pub struct AsyncFileWriter {
     file: tokio::fs::File,
@@ -10,6 +13,9 @@ pub struct AsyncFileWriter {
 impl AsyncFileWriter {
     pub async fn new(path: impl Into<PathBuf>) -> Result<Self> {
         let path = path.into();
+        if fs::try_exists(&path).await? {
+            fs::remove_file(&path).await?;
+        }
         let file = OpenOptions::new()
             .append(true)
             .create(true)

@@ -25,17 +25,17 @@ Usage: profile_stats run [OPTIONS] --file <FILE>
 
 Options:
   -f, --file <FILE>
-
+          
   -s, --s-type <S_TYPE>
           [default: weekly] [possible values: weekly, monthly, quarterly]
   -k, --key <KEY>
-          [default: "[..] - [..]"]
+          [default: "27 Mar - 2 Apr 2023"]
   -m, --migration-file-name <MIGRATION_FILE_NAME>
-          [default: ProfileStatsSeedBatchIn[..]]
+          [default: ProfileStatsSeedBatchIn0408]
   -d, --do-filter
-
+          
   -r, --run-post-script
-
+          
   -h, --help
           Print help
 
@@ -69,7 +69,7 @@ $ words run --help
 Usage: words run [OPTIONS] --file <FILE>
 
 Options:
-  -f, --file <FILE>
+  -f, --file <FILE>      
   -w, --w-type <W_TYPE>  [default: mpsc] [possible values: mpsc, rayon]
   -h, --help             Print help
 
