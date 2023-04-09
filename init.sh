@@ -33,6 +33,14 @@ else
     echo "cargo-deny already installed"
 fi
 
+# Check if typos is installed
+if ! command -v typos &>/dev/null; then
+    echo "typos not found. Installing..."
+    cargo install typos-cli
+else
+    echo "typos already installed"
+fi
+
 # Install pre-commit hooks
 echo "Installing pre-commit hooks..."
 pre-commit install
