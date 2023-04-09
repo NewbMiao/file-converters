@@ -25,6 +25,14 @@ else
     echo "cargo-nextest already installed"
 fi
 
+# Check if cargo-deny is installed
+if ! command -v cargo-deny &>/dev/null; then
+    echo "cargo-deny not found. Installing..."
+    cargo install cargo-deny --locked
+else
+    echo "cargo-deny already installed"
+fi
+
 # Install pre-commit hooks
 echo "Installing pre-commit hooks..."
 pre-commit install
