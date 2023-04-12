@@ -2,12 +2,12 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class {file_name} extends AbstractMigration
+class {{ file_name }} extends AbstractMigration
 {
     public function change()
     {
         $sql = <<<EOL
-{sql}
+{{ sql }}
 EOL;
         $this->execute($sql);
     }

@@ -29,9 +29,9 @@ Options:
   -s, --s-type <S_TYPE>
           [default: weekly] [possible values: weekly, monthly, quarterly]
   -k, --key <KEY>
-          [default: "27 Mar - 2 Apr 2023"]
+          [default: "[..] - [..]"]
   -m, --migration-file-name <MIGRATION_FILE_NAME>
-          [default: ProfileStatsSeedBatchIn0408]
+          [default: ProfileStatsSeedBatchIn[..]]
   -d, --do-filter
           
   -r, --run-post-script

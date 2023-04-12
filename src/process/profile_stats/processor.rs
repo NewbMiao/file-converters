@@ -1,4 +1,5 @@
 use anyhow::{Ok, Result};
+use askama::Template;
 use rayon::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::{
@@ -19,23 +20,35 @@ pub struct ValueType {
     view_gallery: u32,
 }
 
+#[derive(Template)]
+#[template(path = "migration_tpl.txt")]
+struct MigrationTemplate<'a> {
+    sql: &'a str,
+    file_name: &'a str,
+}
 impl Processor for RunArgs {
     type Item = ValueType;
 
     fn load_data(&self) -> anyhow::Result<Vec<Self::Item>> {
         let mut data = load_excel_data::<Self::Item>(self.file.as_path()).unwrap();
         // filter with target account ids
-        if let Some(ids) = get_target_ids() {
-            data = data
-                .into_iter()
-                .filter_map(|v| {
-                    if !ids.contains(&v.id) {
-                        return None;
-                    }
-                    Some(v)
-                })
-                .collect::<Vec<Self::Item>>();
-        };
+        if let (true, Some(ids)) = (self.do_filter, get_target_ids()) {
+            data.retain(|v| ids.contains(&v.id));
+        }
+        // if self.do_filter {
+        //     if let Some(ids) = get_target_ids() {
+        //         data = data
+        //             .into_iter()
+        //             .filter_map(|v| {
+        //                 if !ids.contains(&v.id) {
+        //                     return None;
+        //                 }
+        //                 Some(v)
+        //             })
+        //             .collect::<Vec<Self::Item>>();
+        //     }
+        // }
+
         Ok(data)
     }
 
@@ -72,11 +85,13 @@ impl Processor for RunArgs {
     }
 
     fn write_data(&self, result_str: &str) -> anyhow::Result<()> {
-        let tpl = fs::read_to_string("fixtures/migration_tpl.txt")?
-            .replace("{sql}", result_str)
-            .replace("{file_name}", &self.migration_file_name);
+        let tpl = MigrationTemplate {
+            sql: result_str,
+            file_name: &self.migration_file_name,
+        };
+        let output = tpl.render()?;
         let output_file = "migration_output.php";
-        fs::write(output_file, tpl).expect("Unable to write migration file");
+        fs::write(output_file, output).expect("Unable to write migration file");
         println!("migration sql has been generated to file: {}", output_file);
         Ok(())
     }
