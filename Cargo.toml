@@ -15,7 +15,7 @@ chrono = { version = "0.4.23", default-features = false, features = ["clock"] }
 clap = { version = "4.1.4", features = ["derive"] }
 csv = "1.2.0"
 dialoguer = "0.10.3"
-dirs = "5.0.0"
+dirs = "5.0.1"
 lazy_static = "1.4.0"
 rayon = "1.6.1"
 sentiment = "0.1.1"
