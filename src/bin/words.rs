@@ -1,6 +1,6 @@
 use anyhow::Result;
 use clap::Parser;
-use stats_sql_generator::{
+use file_converters::{
     process::words::{args::WordArgs, cli::WordsAction},
     AsyncProcessor, Cli, CliArgs,
 };

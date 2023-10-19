@@ -1,6 +1,6 @@
 use anyhow::Result;
 use clap::Parser;
-use stats_sql_generator::{
+use file_converters::{
     process::profile_stats::cli::{Action, RunArgs},
     Cli, CliArgs, Processor,
 };
