@@ -1,8 +1,11 @@
-use docx::formatting::CharacterProperty;
-use docx::styles::DefaultStyle;
-use docx::{document::Paragraph, Docx};
+use docx_rs::Docx;
+use docx_rs::Paragraph;
+use docx_rs::Run;
+use docx_rs::RunFonts;
 use regex::Regex;
 use std::fs;
+use std::fs::File;
+use std::path::Path;
 use std::path::PathBuf;
 use std::process::exit;
 
@@ -88,20 +91,20 @@ fn poem_search(title: String, author: String) -> Vec<String> {
     }
     lines
 }
-
 fn write_docx(lines: &Vec<String>) {
-    let mut new_doc = Docx::default();
-    new_doc
-        .styles
-        .default(DefaultStyle::default().character(CharacterProperty::default().size(27usize)));
-
+    let path = Path::new("current/poem.docx");
+    let file = File::create(&path).unwrap();
+    let mut new_doc = Docx::new();
     lines.iter().for_each(|line| {
-        let para = Paragraph::default().push_text(line.as_str());
-        new_doc.document.push(para);
+        let para = Paragraph::new().add_run(
+            Run::new()
+                .add_text(line.as_str())
+                .fonts(RunFonts::new().east_asia("SimSun"))
+                .size(27),
+        );
+        new_doc = new_doc.clone().add_paragraph(para);
     });
-    new_doc
-        .write_file("current/poem.docx")
-        .expect("Failed to save file");
+    new_doc.build().pack(file).unwrap();
 }
 
 fn reset_current() {

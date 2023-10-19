@@ -16,7 +16,7 @@ clap = { version = "4.1.4", features = ["derive"] }
 csv = "1.2.0"
 dialoguer = "0.10.3"
 dirs = "5.0.0"
-docx = "1.1.2"
+docx-rs = "0.4.7"
 encoding = "0.2.33"
 glob = "0.3.1"
 lazy_static = "1.4.0"
