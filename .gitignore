@@ -5,3 +5,5 @@
 /*.txt
 .DS_Store
 examples
+/current
+fixtures/*.txt
