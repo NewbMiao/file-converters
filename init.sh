@@ -3,7 +3,7 @@
 # Check if pre-commit is installed
 if ! command -v pre-commit &>/dev/null; then
     echo "pre-commit not found. Installing..."
-    pip3 install pre-commit
+    brew install pre-commit
 else
     echo "pre-commit already installed"
 fi

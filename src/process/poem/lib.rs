@@ -1,21 +1,17 @@
-use docx_rs::Docx;
-use docx_rs::Paragraph;
-use docx_rs::Run;
-use docx_rs::RunFonts;
 use regex::Regex;
 use std::fs;
-use std::fs::File;
-use std::path::Path;
 use std::path::PathBuf;
-use std::process::exit;
 
 use crate::file::get_file_full_path;
+use crate::process::poem::file::write_docx;
 
-use super::gbk::read_as_gbk;
-use super::gbk::save_as_gbk;
+use super::file::read_as_lines;
+use super::file::save_content;
+
 pub fn handle(target: String) {
+    let parts = target.split(" ").collect::<Vec<_>>();
+    let (title, author) = (parts[0].to_string(), parts[1].to_string());
     reset_current();
-    let (title, author) = get_next_target(target);
     let lines = poem_search(title.clone(), author.clone());
     let top_line = lines[0].clone();
     println!("find poem, top_line: {}", top_line);
@@ -24,9 +20,9 @@ pub fn handle(target: String) {
 
     let mut tips = vec![
         format!("标题:  唐诗三百首：{} - {}", title, author),
-        format!("分类:  唐诗三百首,{},{}", author, audio_type),
+        format!("分类:  唐诗三百首 , {} , {}", author, audio_type),
     ];
-    let other_tips = read_as_gbk("fixtures/poem_tips.txt".to_string());
+    let other_tips = read_as_lines("fixtures/poem_tips.txt".to_string());
     tips.extend_from_slice(&other_tips[..]);
     tips.extend_from_slice(&lines[..]);
     write_docx(&tips);
@@ -35,7 +31,7 @@ pub fn handle(target: String) {
 }
 fn mark_as_done(target: String) {
     let filename = "fixtures/titles.txt";
-    let rows = read_as_gbk(filename.to_string());
+    let rows = read_as_lines(filename.to_string());
     let line = rows
         .iter()
         .find(|line| line.contains(&target))
@@ -45,34 +41,21 @@ fn mark_as_done(target: String) {
     }
     let handled_line = format!("{} done", line);
     let updated = rows.join("\n").replace(line, &handled_line);
-    save_as_gbk(filename.to_string(), updated);
+    save_content(filename.to_string(), updated);
 }
-fn get_next_target(target: String) -> (String, String) {
+pub fn get_next_target() -> String {
     let filename = "fixtures/titles.txt";
-    let rows = read_as_gbk(filename.to_string());
-    let line = if !target.is_empty() {
-        if !rows.iter().any(|line| line.contains(&target)) {
-            panic!("no such title");
-        }
-        target
-    } else {
-        rows.iter()
-            .find(|line| !line.contains("done"))
-            .expect("no more title")
-            .to_string()
-    };
-    let targets = line
-        .split(" ")
-        .take(2)
-        .map(|v| v.to_string())
-        .collect::<Vec<String>>();
-    (targets[0].clone(), targets[1].clone())
+    let rows = read_as_lines(filename.to_string());
+    rows.iter()
+        .find(|line| !line.contains("done"))
+        .expect("no more title")
+        .to_string()
 }
 
 fn poem_search(title: String, author: String) -> Vec<String> {
     let filename = "fixtures/poems.txt";
 
-    let rows = read_as_gbk(filename.to_string());
+    let rows = read_as_lines(filename.to_string());
 
     let mut lines: Vec<String> = Vec::new();
     let mut is_poem = false;
@@ -90,21 +73,6 @@ fn poem_search(title: String, author: String) -> Vec<String> {
         }
     }
     lines
-}
-fn write_docx(lines: &Vec<String>) {
-    let path = Path::new("current/poem.docx");
-    let file = File::create(&path).unwrap();
-    let mut new_doc = Docx::new();
-    lines.iter().for_each(|line| {
-        let para = Paragraph::new().add_run(
-            Run::new()
-                .add_text(line.as_str())
-                .fonts(RunFonts::new().east_asia("SimSun"))
-                .size(27),
-        );
-        new_doc = new_doc.clone().add_paragraph(para);
-    });
-    new_doc.build().pack(file).unwrap();
 }
 
 fn reset_current() {
@@ -143,8 +111,7 @@ fn audio_search(title: String, author: String) -> String {
             re_with_author.is_match(filename) || re_without_author.is_match(filename)
         })
         .unwrap_or_else(|| {
-            println!("no audio found for {}", title);
-            exit(1);
+            panic!("no audio found for {}", title);
         })
         .unwrap();
     println!("find audio src: {:?}", src.as_path().to_str().unwrap());

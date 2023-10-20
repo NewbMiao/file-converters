@@ -5,6 +5,8 @@ use std::default::Default;
 
 use crate::CliArgs;
 
+use super::lib::get_next_target;
+
 #[derive(Parser, Debug, Clone, Default)]
 pub struct PoemArgs {
     #[clap(short, long, default_value = "")]
@@ -16,9 +18,10 @@ impl CliArgs for PoemArgs {
         Ok(self.clone())
     }
     fn parse_args_interactively(&mut self) -> Result<Self> {
+        let next_target = get_next_target();
         let target = Input::with_theme(&ColorfulTheme::default())
             .with_prompt("Target of poem to search")
-            .default("相思 王维".to_string())
+            .default(next_target)
             .interact_text()?;
 
         Ok(PoemArgs { target })
