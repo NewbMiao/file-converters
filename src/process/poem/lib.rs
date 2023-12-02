@@ -9,7 +9,7 @@ use super::file::read_as_lines;
 use super::file::save_content;
 
 pub fn handle(target: String) {
-    let parts = target.split(" ").collect::<Vec<_>>();
+    let parts = target.split(' ').collect::<Vec<_>>();
     let (title, author) = (parts[0].to_string(), parts[1].to_string());
     reset_current();
     let lines = poem_search(title.clone(), author.clone());
@@ -90,7 +90,7 @@ fn reset_current() {
 fn audio_search(title: String, author: String) -> String {
     let fullpath = get_file_full_path("~/Documents/poem");
     let formatted_title = title
-        .replace("·", "")
+        .replace('·', "")
         .split(',')
         .take(2)
         .collect::<String>();
