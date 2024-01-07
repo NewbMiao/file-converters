@@ -99,34 +99,28 @@ fn audio_search(title: String, author: String) -> String {
     let audio = glob::glob(&format!(
         "{}/**/*{}*.mp3",
         fullpath.unwrap().to_str().unwrap(),
-        formatted_title
+        formatted_title.chars().take(5).collect::<String>()
     ))
     .unwrap();
-    let re_with_author = Regex::new(&format!(r"\d+{}（{}）.mp3", formatted_title, author)).unwrap();
-    let re_without_author = Regex::new(&format!(r"\d+{}.mp3", formatted_title)).unwrap();
+    let title_with_author = &format!("{}（{}）", formatted_title, author);
+    let title_without_author = &formatted_title.to_string();
 
-    let mut most_similar_audio = "".to_string();
-    let mut most_similar_audio_score: f64 = 0.5;
     let src = audio
         .into_iter()
         .find(|v| {
             let filename = v.as_ref().unwrap().file_name().unwrap().to_str().unwrap();
             // remove prefix 3 number and suffix 4 char: .mp3
             let tmp = &filename[3..filename.len() - 4];
-            println!("filename: {}", tmp);
-            let score = normalized_levenshtein(&title, tmp);
-            if score >= most_similar_audio_score {
-                println!("most_similar_audio: {}, score: {}", filename, score);
-                most_similar_audio = filename.to_string();
-                most_similar_audio_score = score;
-            }
-            re_with_author.is_match(filename) || re_without_author.is_match(filename)
+            let title = &title_with_author[..tmp.len()];
+            let score = normalized_levenshtein(tmp, title).abs();
+            println!("[debug] filename: {}, match score: {}", tmp, score);
+            tmp.eq(title)
+                || title_with_author.eq(filename)
+                || title_without_author.eq(filename)
+                || score >= 0.7
         })
         .unwrap_or_else(|| {
-            panic!(
-                "no audio found for {}, most similar audio: {}",
-                title, most_similar_audio
-            );
+            panic!("no audio found for {}", title);
         })
         .unwrap();
     println!("find audio src: {:?}", src.as_path().to_str().unwrap());
