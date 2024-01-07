@@ -27,10 +27,23 @@ pub fn write_docx(lines: &[String]) {
         }
         let (runs, align) = if is_poem {
             (
-                vec![Run::new()
-                    .add_text(line.as_str())
-                    .fonts(RunFonts::new().east_asia("SimSun"))
-                    .size(32)],
+                line.split('，')
+                    .map(|l| {
+                        let text = if !l.is_empty()
+                            && !l.contains('。')
+                            && !l.contains('《')
+                            && !l.contains('？')
+                        {
+                            format!("{}，", l)
+                        } else {
+                            l.to_string()
+                        };
+                        Run::new()
+                            .add_text(text)
+                            .fonts(RunFonts::new().east_asia("SimSun"))
+                            .size(32)
+                    })
+                    .collect::<Vec<_>>(),
                 docx_rs::AlignmentType::Center,
             )
         } else {
