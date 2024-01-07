@@ -25,6 +25,7 @@ regex = "1.10.2"
 sentiment = "0.1.1"
 serde = { version = "1.0.152", features = ["derive"] }
 serde_json = "1.0.95"
+strsim = "0.10.0"
 tokio = { version = "1.27.0", features = ["full"] }
 trycmd = "0.14.11"
 

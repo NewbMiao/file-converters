@@ -585,6 +585,7 @@ dependencies = [
  "sentiment",
  "serde 1.0.159",
  "serde_json 1.0.95",
+ "strsim",
  "tokio",
  "trycmd",
 ]

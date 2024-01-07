@@ -30,7 +30,7 @@ pub fn write_docx(lines: &[String]) {
                 vec![Run::new()
                     .add_text(line.as_str())
                     .fonts(RunFonts::new().east_asia("SimSun"))
-                    .size(36)],
+                    .size(32)],
                 docx_rs::AlignmentType::Center,
             )
         } else {
