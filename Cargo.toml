@@ -7,7 +7,7 @@ license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0.69"
+anyhow = "1.0.82"
 askama = "0.12.0"
 async-trait = "0.1.68"
 calamine = "0.19.1"
