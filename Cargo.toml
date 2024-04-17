@@ -20,7 +20,7 @@ lazy_static = "1.4.0"
 rayon = "1.6.1"
 sentiment = "0.1.1"
 serde = { version = "1.0.152", features = ["derive"] }
-serde_json = "1.0.95"
+serde_json = "1.0.116"
 tokio = { version = "1.27.0", features = ["full"] }
 trycmd = "0.14.11"
 
