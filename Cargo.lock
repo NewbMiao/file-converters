@@ -68,9 +68,9 @@ dependencies = [
 
 [[package]]
 name = "anyhow"
-version = "1.0.70"
+version = "1.0.91"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7de8ce5e0f9f8d88245311066a578d72b7af3e7088f32783804676302df237e4"
+checksum = "c042108f3ed77fd83760a5fd79b53be043192bb3b9dba91d8c574c0ada7850c8"
 
 [[package]]
 name = "askama"
@@ -510,6 +510,28 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e51093e27b0797c359783294ca4f0a911c270184cb10f85783b118614a1501be"
 dependencies = [
  "instant",
+]
+
+[[package]]
+name = "file-converters"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "askama",
+ "async-trait",
+ "calamine",
+ "chrono",
+ "clap",
+ "csv",
+ "dialoguer",
+ "dirs",
+ "lazy_static 1.4.0",
+ "rayon",
+ "sentiment",
+ "serde 1.0.159",
+ "serde_json 1.0.95",
+ "tokio",
+ "trycmd",
 ]
 
 [[package]]
@@ -1194,28 +1216,6 @@ checksum = "64a4a911eed85daf18834cfaa86a79b7d266ff93ff5ba14005426219480ed662"
 dependencies = [
  "libc",
  "winapi",
-]
-
-[[package]]
-name = "stats-sql-generator"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "askama",
- "async-trait",
- "calamine",
- "chrono",
- "clap",
- "csv",
- "dialoguer",
- "dirs",
- "lazy_static 1.4.0",
- "rayon",
- "sentiment",
- "serde 1.0.159",
- "serde_json 1.0.95",
- "tokio",
- "trycmd",
 ]
 
 [[package]]
